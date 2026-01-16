@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadley - Marketing Médico de Elite</title>
+    
+    <!-- Bibliotecas Base -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              navy: '#050a30',
+              gold: '#c9a227',
+              muted: '#828282',
+            },
+            animation: {
+              'marquee': 'marquee 30s linear infinite',
+              'pulse-glow': 'pulse-glow 3s infinite',
+            },
+            keyframes: {
+              marquee: {
+                '0%': { transform: 'translateX(0%)' },
+                '100%': { transform: 'translateX(-50%)' }
+              },
+              'pulse-glow': {
+                '0%, 100%': { opacity: 0.5, transform: 'scale(1)' },
+                '50%': { opacity: 1, transform: 'scale(1.1)' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #050a30; color: #f4f4f4; margin: 0; overflow-x: hidden; }
+        .gold-gradient-bg { background: linear-gradient(135deg, #96701b 0%, #c9a227 45%, #f3cf6d 55%, #c9a227 100%); }
+        .gold-gradient-text { background: linear-gradient(135deg, #96701b 0%, #c9a227 45%, #f3cf6d 55%, #c9a227 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .green-gradient-bg { background: linear-gradient(135deg, #2ecc71 0%, #39FF14 50%, #b5ff42 100%); }
+        .glass-card { background: rgba(17, 22, 61, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(201, 162, 39, 0.2); border-radius: 24px; }
+        .star-bg { background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 30px 30px; }
+        input::placeholder { color: rgba(130, 130, 130, 0.5); }
+    </style>
+</head>
+<body>
+    <div class="fixed inset-0 star-bg z-[-1]"></div>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const LeadForm = () => {
+          const [loading, setLoading] = useState(false);
+          const [formData, setFormData] = useState({ nome: '', email: '', telefone: '', clinica: '' });
+
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            setLoading(true);
+            setTimeout(() => {
+              alert("Diagnóstico solicitado com sucesso! Nossa equipe entrará em contato.");
+              setLoading(false);
+              setFormData({ nome: '', email: '', telefone: '', clinica: '' });
+            }, 1500);
+          };
+
+          const inputClass = "w-full bg-navy/60 border border-white/10 rounded-xl p-4 text-white focus:border-gold outline-none transition-all";
+
+          return (
+            <div id="lead-form" className="w-full max-w-4xl mx-auto px-4 py-20 relative z-10">
+              <div className="glass-card overflow-hidden shadow-2xl border-gold/30">
+                <div className="gold-gradient-bg h-1.5 w-full"></div>
+                <div className="p-8 md:p-12">
+                  <h2 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tighter text-center">
+                    Inicie sua <span className="gold-gradient-text">Transformação</span>
+                  </h2>
+                  <p className="text-muted text-center mb-10 text-lg">Receba um diagnóstico de growth exclusivo para sua clínica.</p>
+                  
+                  <form onSubmit={handleSubmit} className="grid gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input required placeholder="Nome Completo" value={formData.nome} onChange={e => setFormData({...formData, nome: e.target.value})} className={inputClass} />
+                      <input required type="email" placeholder="E-mail Profissional" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className={inputClass} />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input required placeholder="WhatsApp (DDD)" value={formData.telefone} onChange={e => setFormData({...formData, telefone: e.target.value})} className={inputClass} />
+                      <input required placeholder="Nome da Clínica" value={formData.clinica} onChange={e => setFormData({...formData, clinica: e.target.value})} className={inputClass} />
+                    </div>
+                    <button type="submit" disabled={loading} className="w-full py-5 green-gradient-bg text-navy font-black text-xl rounded-xl shadow-[0_0_30px_rgba(57,255,20,0.3)] hover:scale-[1.01] active:scale-95 transition-all">
+                      {loading ? "PROCESSANDO..." : "SOLICITAR DIAGNÓSTICO GRATUITO"}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        const App = () => {
+          const marqueeText = "A PIONEIRA EM ATENDIMENTO INTEGRADO COM IA • ".repeat(10);
+          
+          return (
+            <div className="min-h-screen">
+              <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-navy/80 backdrop-blur-xl border-b border-gold/10">
+                <span className="font-black text-2xl gold-gradient-text tracking-tighter">Hadley</span>
+                <button onClick={() => document.getElementById('lead-form').scrollIntoView({behavior:'smooth'})} className="text-[10px] font-black text-white/80 border border-gold/30 px-4 py-2 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all">
+                  Contato
+                </button>
+              </nav>
+
+              <main className="pt-48 flex flex-col items-center text-center px-4">
+                <h1 className="text-4xl md:text-8xl font-black mb-8 tracking-tighter text-white leading-[1.1] max-w-6xl">
+                  Não é falta de <span className="gold-gradient-text">pacientes</span>.<br/>
+                  É falta de um passo que você insiste em não dar.
+                </h1>
+                
+                <p className="max-w-2xl text-muted text-xl md:text-2xl mb-12 font-medium">
+                  Cuidamos de toda a jornada: Atração, Interesse e Agendamento para Clínicas de Elite.
+                </p>
+                
+                <button 
+                  onClick={() => document.getElementById('lead-form').scrollIntoView({behavior:'smooth'})}
+                  className="green-gradient-bg text-navy px-12 py-6 rounded-full font-black text-2xl shadow-[0_0_50px_rgba(57,255,20,0.4)] hover:scale-105 transition-all mb-24"
+                >
+                  DAR O PRÓXIMO PASSO
+                </button>
+                
+                <div className="w-screen overflow-hidden h-16 gold-gradient-bg flex items-center rotate-[-1deg] shadow-2xl mb-20">
+                  <div className="animate-marquee whitespace-nowrap text-navy font-black text-sm uppercase tracking-[0.4em]">
+                    {marqueeText}
+                  </div>
+                </div>
+
+                <LeadForm />
+              </main>
+
+              <footer className="py-20 border-t border-white/5 text-center">
+                <div className="gold-gradient-text font-black text-3xl mb-4">Hadley</div>
+                <p className="text-muted text-[10px] font-bold tracking-[0.5em] uppercase">
+                  © 2025 HADLEY HEALTH MARKETING • REFINADO PARA MÉDICOS
+                </p>
+              </footer>
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
